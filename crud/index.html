@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CRUD Operations with jQuery</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>CRUD Operations</h1>
+
+  <form id="myForm">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <button type="submit">Create</button>
+  </form>
+
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data rows will be dynamically added here -->
+    </tbody>
+  </table>
+
+  <script>
+    $(document).ready(function() {
+      // Event listener for the form submission
+      $("#myForm").submit(function(event) {
+        event.preventDefault(); // Prevent default form submission behavior
+
+        var name = $("#name").val();
+        var email = $("#email").val();
+
+        // Create a new row in the table with the submitted data
+        var newRow = $("<tr>")
+          .append($("<td>").text(name))
+          .append($("<td>").text(email))
+          .append($("<td>").html("<button class='editBtn'>Edit</button> <button class='deleteBtn'>Delete</button>"))
+          .appendTo("#dataTable");
+
+        // Clear the form fields
+        $("#name").val("");
+        $("#email").val("");
+      });
+
+      // Event delegation for edit and delete buttons
+      $("#dataTable").on("click", ".editBtn", function() {
+        var row = $(this).closest("tr");
+        var name = row.find("td:eq(0)").text();
+        var email = row.find("td:eq(1)").text();
+
+        // Populate the form fields with the selected row data
+        $("#name").val(name);
+        $("#email").val(email);
+
+        // Remove the row from the table
+        row.remove();
+      });
+
+      $("#dataTable").on("click", ".deleteBtn", function() {
+        var row = $(this).closest("tr");
+        row.remove();
+      });
+    });
+  </script>
+</body>
+</html>
